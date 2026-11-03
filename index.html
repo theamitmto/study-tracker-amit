@@ -42,19 +42,10 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      height: 100%;
-      height: 100dvh;
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-      background-color: #090d16;
-    }
-
     #super-tracker-root {
       /* DEFAULT TO LUXURIOUS LIGHT MODE */
       --st-bg: #f8fafc;
-      --st-card: rgba(255, 255, 255, 0.98);
+      --st-card: rgba(255, 255, 255, 0.96);
       --st-card-solid: #ffffff;
       --st-card-subtle: #f1f5f9;
       --st-border: #e2e8f0;
@@ -72,17 +63,14 @@
       color: var(--st-text-body);
       background-color: var(--st-bg);
       line-height: 1.5;
-      height: 100%;
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: relative;
+      min-height: 100vh;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 84px);
     }
 
     #super-tracker-root.dark {
       --st-bg: #090d16;
-      --st-card: rgba(16, 22, 38, 0.96);
+      --st-card: rgba(16, 22, 38, 0.94);
       --st-card-solid: #101626;
       --st-card-subtle: #172033;
       --st-border: #1e293b;
@@ -96,13 +84,6 @@
       --st-checkbox-bg: #141c2e;
       --st-checkbox-border: #28374d;
       --st-sticky-col: #101626;
-    }
-
-    .app-scroll-body {
-      flex: 1 1 0%;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 84px);
     }
 
     #super-tracker-root .st-glass {
@@ -222,106 +203,68 @@
 <body class="m-0 p-0 bg-slate-900">
 
   <!-- ROOT MOBILE CONTAINER -->
-  <div id="super-tracker-root" class="w-full h-full transition-colors duration-200">
+  <div id="super-tracker-root" class="w-full min-h-screen transition-colors duration-200">
     
-    <!-- REDESIGNED TOP STICKY MOBILE APP BAR (EXECUTIVE NATIVE APP HEADER) -->
-    <header class="flex-shrink-0 z-40 bg-[var(--st-card)]/90 backdrop-blur-2xl border-b border-[var(--st-border)] px-3.5 pt-[max(0.6rem,env(safe-area-inset-top))] pb-2.5 shadow-sm">
-      <div class="max-w-md mx-auto space-y-2">
+    <!-- TOP STICKY MOBILE APP BAR -->
+    <header class="sticky top-0 z-40 bg-[var(--st-card)]/90 backdrop-blur-md border-b border-[var(--st-border)] px-3.5 py-2.5 shadow-sm">
+      <div class="flex items-center justify-between gap-2 max-w-md mx-auto">
         
-        <!-- Primary Row: Profile, Level Badge & Tactile Action Icons -->
-        <div class="flex items-center justify-between gap-2">
-          
-          <!-- Student Identity Card -->
-          <div class="flex items-center gap-2.5 min-w-0 flex-1">
-            <div onclick="openExamSetupModal()" class="relative cursor-pointer flex-shrink-0 active:scale-95 transition-transform" title="प्रोफाइल बदलें">
-              <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white text-base font-black shadow-md shadow-sky-500/25">
-                🎯
-              </div>
-              <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-[var(--st-card)]"></span>
-            </div>
-
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="text-xs font-display font-black tracking-tight text-[var(--st-text-head)] truncate max-w-[120px]" id="displayHeaderStudentName">
-                  Aspirant
-                </span>
-                <span id="badgeRank" class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded-md bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 font-mono">
-                  Novice
-                </span>
-              </div>
-              
-              <!-- Sub-pills: XP & Live Date -->
-              <div class="flex items-center gap-1.5 text-[10px] text-[var(--st-text-muted)] mt-0.5">
-                <button type="button" onclick="openTrophyCaseModal()" class="font-mono font-black text-amber-500 flex items-center gap-0.5 active:scale-95 transition-transform">
-                  ⚡ <span id="headerXpDisplay">0 XP</span>
-                </button>
-                <span class="opacity-40">•</span>
-                <span id="liveDateString" class="font-medium text-[9.5px] truncate">आज</span>
-              </div>
-            </div>
+        <!-- Identity Branding & Student Name -->
+        <div class="flex items-center gap-2 truncate">
+          <div class="w-9 h-9 min-w-[36px] rounded-xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/25 text-lg font-black st-float-icon">
+            🎯
           </div>
-
-          <!-- Quick Action Buttons Hub -->
-          <div class="flex items-center gap-1 flex-shrink-0">
-            <!-- Add Subject (+) Action -->
-            <button type="button" onclick="openSubjectModal()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white font-black text-base flex items-center justify-center shadow-sm shadow-sky-500/30 active:scale-90 transition-all" title="नया विषय जोड़ें">
-              +
-            </button>
-            
-            <!-- Formula Vault -->
-            <button type="button" onclick="openVaultModal()" class="w-8 h-8 rounded-xl st-subtle text-xs flex items-center justify-center text-[var(--st-text-head)] active:scale-90 transition-all" title="फॉर्मूला वॉल्ट">
-              📑
-            </button>
-
-            <!-- Manage Settings -->
-            <button type="button" onclick="openManageDrawer()" class="w-8 h-8 rounded-xl st-subtle text-xs flex items-center justify-center text-[var(--st-text-head)] active:scale-90 transition-all" title="मैनेज">
-              ⚙️
-            </button>
-
-            <!-- Language Badge -->
-            <button type="button" onclick="toggleAppLanguage()" class="h-8 px-2 rounded-xl st-subtle text-[10px] font-black text-sky-500 flex items-center justify-center active:scale-90 transition-all">
-              <span id="mobileLangLabel">EN</span>
-            </button>
-
-            <!-- Theme Toggle -->
-            <button type="button" onclick="toggleAppTheme()" class="w-8 h-8 rounded-xl st-subtle text-xs flex items-center justify-center text-[var(--st-text-head)] active:scale-90 transition-all" title="थीम बदलें">
-              <span id="mobileThemeIcon">🌙</span>
-            </button>
-
-            <!-- Sound Toggle -->
-            <button type="button" onclick="toggleSoundFx()" id="btnMobileSound" class="w-8 h-8 rounded-xl st-subtle text-xs flex items-center justify-center active:scale-90 transition-all" title="ध्वनि">
-              🔊
-            </button>
-          </div>
-
-        </div>
-
-        <!-- Secondary Row: Executive Target Exam Dynamic Pill -->
-        <div class="flex items-center justify-between px-2.5 py-1.5 rounded-xl st-subtle border border-indigo-500/20 bg-indigo-500/5 text-xs shadow-inner">
-          <div class="flex items-center gap-1.5 min-w-0 flex-1 mr-2 cursor-pointer" onclick="openExamSetupModal()">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
-            <div class="min-w-0 flex-1 truncate">
-              <div class="flex items-center gap-1">
-                <span class="font-extrabold text-[var(--st-text-head)] text-[11px] truncate" id="displayTargetExamName">Target Exam</span>
-                <span class="text-[9px] text-sky-500 flex-shrink-0">✏️</span>
-              </div>
-              <span id="badgeARI" class="text-[8.5px] font-mono font-bold text-amber-600 dark:text-amber-400 block -mt-0.5">ARI: 0% Ready</span>
+          <div class="truncate">
+            <h1 class="text-sm font-display font-black tracking-tight text-[var(--st-text-head)] leading-none">
+              Smart Study <span class="text-sky-500">Pro</span>
+            </h1>
+            <div class="flex items-center gap-1.5 mt-1">
+              <button onclick="openExamSetupModal()" class="text-[10px] font-bold text-sky-600 dark:text-sky-400 flex items-center gap-0.5 truncate max-w-[120px]">
+                <span id="displayHeaderStudentName">Aspirant</span> ✏️
+              </button>
+              <span id="badgeRank" class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 truncate">
+                Novice
+              </span>
             </div>
-          </div>
-          
-          <!-- Monospace Digital Countdown Timer -->
-          <div class="font-mono font-black text-indigo-600 dark:text-indigo-300 text-[11px] px-2 py-0.5 rounded-lg bg-[var(--st-card)] border border-[var(--st-border)] flex items-center gap-1 shadow-sm flex-shrink-0" id="countdownDisplay">
-            <span id="cdDays">00</span><span class="text-[8px] text-[var(--st-text-muted)]">d</span> :
-            <span id="cdHours">00</span><span class="text-[8px] text-[var(--st-text-muted)]">h</span> :
-            <span id="cdMins">00</span><span class="text-[8px] text-[var(--st-text-muted)]">m</span>
           </div>
         </div>
 
+        <!-- Quick Top Action Buttons -->
+        <div class="flex items-center gap-1.5 flex-shrink-0">
+          <button onclick="openSubjectModal()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white font-black text-base flex items-center justify-center shadow-md active:scale-95" title="नया विषय जोड़ें">
+            +
+          </button>
+          <button onclick="openManageDrawer()" class="w-8 h-8 rounded-xl st-subtle text-xs flex items-center justify-center text-[var(--st-text-head)] active:scale-95" title="मैनेज">
+            ⚙️
+          </button>
+          <button onclick="toggleAppLanguage()" class="px-2 h-8 rounded-xl st-subtle text-[11px] font-bold text-sky-500 flex items-center justify-center active:scale-95">
+            <span id="mobileLangLabel">EN</span>
+          </button>
+          <button onclick="toggleAppTheme()" class="w-8 h-8 rounded-xl st-subtle text-xs flex items-center justify-center text-[var(--st-text-head)] active:scale-95" title="थीम">
+            <span id="mobileThemeIcon">🌙</span>
+          </button>
+          <button onclick="toggleSoundFx()" id="btnMobileSound" class="w-8 h-8 rounded-xl st-subtle text-xs flex items-center justify-center active:scale-95" title="ध्वनि">
+            🔊
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Compact Exam Countdown Banner -->
+      <div class="mt-2 flex items-center justify-between px-3 py-1.5 rounded-xl st-subtle border border-indigo-500/25 bg-indigo-500/5 text-[11px] max-w-md mx-auto">
+        <div class="flex items-center gap-1.5 truncate">
+          <span>⏳</span>
+          <span class="font-extrabold text-sky-600 dark:text-sky-400 truncate max-w-[140px]" id="displayTargetExamName">Target Exam</span>
+          <button onclick="openExamSetupModal()" class="text-[9px] text-[var(--st-text-muted)] hover:text-sky-500">✏️</button>
+        </div>
+        <div class="font-mono font-black text-indigo-600 dark:text-indigo-300 text-xs flex items-center gap-1 flex-shrink-0" id="countdownDisplay">
+          <span id="cdDays">00</span>d : <span id="cdHours">00</span>h : <span id="cdMins">00</span>m
+        </div>
       </div>
     </header>
 
     <!-- MAIN SCROLLABLE MOBILE CONTENT CONTAINER -->
-    <main class="app-scroll-body p-3.5 space-y-4 max-w-md mx-auto w-full">
+    <main class="p-3.5 space-y-4 max-w-md mx-auto">
 
       <!-- ================= TAB 1: DAILY MATRIX VIEW ================= -->
       <section id="tabContentMatrix" class="space-y-4">
@@ -371,70 +314,6 @@
               <span id="metricStreakDays" class="text-xl font-display font-black text-amber-500">0 दिन</span>
             </div>
             <p id="card3Note" class="text-[9px] text-[var(--st-text-muted)] mt-1 truncate">बिना ब्रेक निरंतर</p>
-          </div>
-        </div>
-
-        <!-- NEW ULTRA FEATURE 1: Daily Wellness & Neuro-Hydration Booster -->
-        <div class="st-glass p-3 rounded-2xl flex items-center justify-between gap-2 text-xs">
-          <div class="flex items-center gap-2">
-            <span class="text-lg">💧</span>
-            <div>
-              <span class="font-bold text-[var(--st-text-head)] block text-[11px]">हाइड्रेशन व ब्रेन ब्रेक</span>
-              <span class="text-[9px] text-[var(--st-text-muted)] font-mono" id="lblWaterCount">0 / 8 ग्लास पिए</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="logWaterGlass(1)" class="px-2.5 py-1 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20 font-black text-xs active:scale-90">
-              +1 💧
-            </button>
-            <button onclick="triggerEyeRelaxAlert()" class="px-2.5 py-1 rounded-xl st-subtle text-[11px] font-bold text-indigo-500" title="20-20-20 Eye Rule">
-              👀 20-20-20
-            </button>
-          </div>
-        </div>
-
-        <!-- SUITE 1: Bio-Rhythm, Sleep & Neuro-Wellness Suite Expanded -->
-        <div class="st-glass p-3.5 rounded-2xl space-y-2.5 border border-indigo-500/20 bg-indigo-500/5 text-xs">
-          <div class="flex items-center justify-between">
-            <span class="font-black text-[11px] uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
-              <span>🧬</span> बायो-रिदम व न्यूरो-वेलनेस सूट
-            </span>
-            <span id="badgeCircadianPeak" class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-              ⚡ गोल्डन आवर्स सक्रिय
-            </span>
-          </div>
-
-          <!-- Cortisol/Stress Level & Posture & Sunlight -->
-          <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
-            <!-- Stress selector -->
-            <div class="p-2 rounded-xl st-subtle flex flex-col justify-between">
-              <span class="font-bold text-[var(--st-text-muted)] block">कॉर्टिसोल/तनाव</span>
-              <select id="selectStressLevel" onchange="setDailyStress(this.value)" class="mt-1 bg-transparent text-[10px] font-bold outline-none text-sky-500 text-center">
-                <option value="low">😌 शांत (Low)</option>
-                <option value="med" selected>⚖️ सामान्य (Med)</option>
-                <option value="high">🚨 तनाव (High)</option>
-              </select>
-            </div>
-
-            <!-- Posture check -->
-            <button onclick="triggerPostureCheck()" class="p-2 rounded-xl st-subtle flex flex-col items-center justify-center active:scale-95">
-              <span class="text-sm">🧘</span>
-              <span class="font-bold text-[var(--st-text-head)] mt-0.5">रीढ़/पोस्चर</span>
-              <span class="text-[8px] text-[var(--st-text-muted)]">चेक करें</span>
-            </button>
-
-            <!-- Sunlight logger -->
-            <button onclick="logSunlightExposure(15)" class="p-2 rounded-xl st-subtle flex flex-col items-center justify-center active:scale-95">
-              <span class="text-sm">☀️</span>
-              <span class="font-bold text-amber-500 mt-0.5"><span id="lblSunlightMinutes">0</span>m धूप</span>
-              <span class="text-[8px] text-[var(--st-text-muted)]">+15m जोड़ें</span>
-            </button>
-          </div>
-
-          <!-- Sleep Debt & Post-Lunch Dip Status Alert -->
-          <div class="p-2 rounded-xl st-subtle flex items-center justify-between text-[10px] font-mono">
-            <span class="text-[var(--st-text-muted)]">स्लीप डेब्ट (Sleep Debt): <b id="lblSleepDebt" class="text-emerald-500 font-bold">0.0h (संतुलित)</b></span>
-            <span id="lblPostLunchDip" class="text-amber-500 font-bold">1:30 PM डिप अलर्ट</span>
           </div>
         </div>
 
@@ -495,20 +374,6 @@
           </div>
         </div>
 
-        <!-- NEW ULTRA FEATURE 2: Quick Search & Category Filter Pills -->
-        <div class="space-y-2">
-          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-bold" id="subjectFilterPillsContainer">
-            <button onclick="filterSubjectsByCategory('all')" id="fltBtn_all" class="px-3 py-1 rounded-xl bg-sky-500 text-white flex-shrink-0 text-[11px]">🌐 सभी</button>
-            <button onclick="filterSubjectsByCategory('Quant')" id="fltBtn_Quant" class="px-3 py-1 rounded-xl st-subtle text-[var(--st-text-muted)] flex-shrink-0 text-[11px]">📐 गणित</button>
-            <button onclick="filterSubjectsByCategory('Reasoning')" id="fltBtn_Reasoning" class="px-3 py-1 rounded-xl st-subtle text-[var(--st-text-muted)] flex-shrink-0 text-[11px]">🧩 रीजनिंग</button>
-            <button onclick="filterSubjectsByCategory('GS')" id="fltBtn_GS" class="px-3 py-1 rounded-xl st-subtle text-[var(--st-text-muted)] flex-shrink-0 text-[11px]">🏛️ GS / GK</button>
-            <button onclick="filterSubjectsByCategory('Revision')" id="fltBtn_Revision" class="px-3 py-1 rounded-xl st-subtle text-[var(--st-text-muted)] flex-shrink-0 text-[11px]">🔁 रिवीजन</button>
-          </div>
-          <div class="relative">
-            <input type="text" id="inputSubjectSearch" oninput="handleSubjectSearch(this.value)" placeholder="🔍 कोई भी विषय या टॉपिक खोजें..." class="w-full px-3 py-2 rounded-xl st-subtle text-xs outline-none font-medium text-[var(--st-text-head)]">
-          </div>
-        </div>
-
         <!-- 1-7-30 Spaced Repetition Due Alert Strip -->
         <div id="spacedRepetitionSuperAlert" class="hidden st-glass p-3.5 rounded-2xl border-2 border-rose-500/50 bg-gradient-to-r from-rose-500/10 via-amber-500/5 to-sky-500/10 space-y-2 st-animate-fade">
           <div class="flex items-center justify-between pb-1.5 border-b border-[var(--st-border)]">
@@ -550,6 +415,7 @@
           <span id="displayLiveClockDisplay"></span>
           <span id="liveClockDisplay"></span>
           <span id="liveDateDisplay"></span>
+          <span id="badgeARI"></span>
           <span id="badgeEfficiency"></span>
           <span id="lblManifestoPost"></span>
           <span id="metricTopSubject"></span>
@@ -594,50 +460,6 @@
             <div>
               <h2 class="text-sm font-black text-[var(--st-text-head)]">1-7-30 वैज्ञानिक रिवीजन कमांड हब</h2>
               <p class="text-[11px] text-[var(--st-text-muted)]">एबिंगहॉस फॉरगेटिंग कर्व को वैज्ञानिक रूप से हराएं</p>
-            </div>
-          </div>
-
-          <!-- SUITE 3: Overdue Danger Meter & Bulk Action Bar -->
-          <div class="p-3 rounded-2xl st-subtle border border-rose-500/25 bg-rose-500/5 flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2">
-              <span class="text-base">📉</span>
-              <div>
-                <span class="font-bold text-rose-500 block text-[11px]">फॉरगेटिंग कर्व डेंजर मीटर</span>
-                <span class="text-[9px] text-[var(--st-text-muted)] font-mono" id="lblMemoryRetentionDecay">मेमोरी रिटेंशन: 85% सुरक्षित</span>
-              </div>
-            </div>
-            <button onclick="bulkCompleteDueRevisions()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-black text-[10px] shadow-sm active:scale-95">
-              ✓ 1-टैप ऑल डन
-            </button>
-          </div>
-
-          <!-- SUITE 3: Leitner Flashbox Stages (1-5) -->
-          <div class="p-3 rounded-2xl st-subtle space-y-2">
-            <div class="flex items-center justify-between text-[11px] font-bold">
-              <span class="text-[var(--st-text-head)]">लाइटनर बॉक्स प्रोग्रेशन (Leitner System):</span>
-              <span class="text-sky-500 font-mono" id="lblLeitnerTotalCards">0 Cards</span>
-            </div>
-            <div class="grid grid-cols-5 gap-1.5 text-center font-mono text-[9px] font-bold">
-              <div class="p-1.5 rounded-lg bg-rose-500/15 text-rose-500 border border-rose-500/30">
-                <span>Box 1</span>
-                <b class="block text-xs mt-0.5" id="boxCount1">0</b>
-              </div>
-              <div class="p-1.5 rounded-lg bg-amber-500/15 text-amber-500 border border-amber-500/30">
-                <span>Box 2</span>
-                <b class="block text-xs mt-0.5" id="boxCount2">0</b>
-              </div>
-              <div class="p-1.5 rounded-lg bg-sky-500/15 text-sky-500 border border-sky-500/30">
-                <span>Box 3</span>
-                <b class="block text-xs mt-0.5" id="boxCount3">0</b>
-              </div>
-              <div class="p-1.5 rounded-lg bg-indigo-500/15 text-indigo-500 border border-indigo-500/30">
-                <span>Box 4</span>
-                <b class="block text-xs mt-0.5" id="boxCount4">0</b>
-              </div>
-              <div class="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
-                <span>Box 5</span>
-                <b class="block text-xs mt-0.5" id="boxCount5">0</b>
-              </div>
             </div>
           </div>
 
@@ -691,27 +513,6 @@
               <button type="button" onclick="setQuickFocusTag('✍️ PYQ अभ्यास')" class="px-2 py-0.5 rounded-lg st-glass hover:text-sky-500 flex-shrink-0">✍️ PYQs</button>
               <button type="button" onclick="setQuickFocusTag('🔁 शॉर्ट नोट्स रिवीजन')" class="px-2 py-0.5 rounded-lg st-glass hover:text-sky-500 flex-shrink-0">🔁 रिवीजन</button>
             </div>
-          </div>
-
-          <!-- SUITE 2: 5-Second Rule Procrastination Buster & Strike Counter -->
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <!-- 5-Second Rule Button -->
-            <button onclick="start5SecondLaunch()" id="btn5SecLaunch" class="p-2.5 rounded-2xl st-subtle border border-sky-500/30 flex items-center justify-between active:scale-95">
-              <div class="text-left">
-                <span class="font-extrabold text-[var(--st-text-head)] block text-[11px]">5-Sec Rule Launch</span>
-                <span class="text-[9px] text-[var(--st-text-muted)]" id="lbl5SecText">आलस्य भगाएं (5-4-3-2-1)</span>
-              </div>
-              <span class="text-lg">🚀</span>
-            </button>
-
-            <!-- Distraction Strike Jar -->
-            <button onclick="recordDistractionStrike()" class="p-2.5 rounded-2xl st-subtle border border-rose-500/30 flex items-center justify-between active:scale-95">
-              <div class="text-left">
-                <span class="font-extrabold text-rose-500 block text-[11px]">भटकाव स्ट्राइक जार</span>
-                <span class="text-[9px] text-[var(--st-text-muted)]"><b id="lblDistractionStrikes">0</b> भटकाव आज</span>
-              </div>
-              <span class="text-lg">🫙</span>
-            </button>
           </div>
 
           <!-- Presets Slider -->
@@ -774,19 +575,15 @@
             </button>
           </div>
 
-          <!-- Today Focus Stats Battery & SUITE 2: Flow Momentum Gauge -->
-          <div class="grid grid-cols-3 gap-2 text-center text-xs pt-1">
-            <div class="p-2 rounded-2xl st-subtle">
-              <span class="text-[8px] uppercase font-bold text-[var(--st-text-muted)] block">पूर्ण पोमो</span>
-              <span id="metricCompletedPomos" class="text-lg font-black font-mono text-sky-500 mt-0.5 block">0</span>
+          <!-- Today Focus Stats Battery -->
+          <div class="grid grid-cols-2 gap-2 text-center text-xs pt-2">
+            <div class="p-2.5 rounded-2xl st-subtle">
+              <span class="text-[9px] uppercase font-bold text-[var(--st-text-muted)] block">पूर्ण पोमोडोरो</span>
+              <span id="metricCompletedPomos" class="text-xl font-black font-mono text-sky-500 mt-0.5 block">0</span>
             </div>
-            <div class="p-2 rounded-2xl st-subtle">
-              <span class="text-[8px] uppercase font-bold text-[var(--st-text-muted)] block">डीप समय</span>
-              <span id="metricFocusDeskTime" class="text-lg font-black font-mono text-emerald-500 mt-0.5 block">0m</span>
-            </div>
-            <div class="p-2 rounded-2xl st-subtle">
-              <span class="text-[8px] uppercase font-bold text-[var(--st-text-muted)] block">फ्लो मोमेंटम</span>
-              <span id="lblFlowMomentum" class="text-lg font-black font-mono text-indigo-500 mt-0.5 block">100%</span>
+            <div class="p-2.5 rounded-2xl st-subtle">
+              <span class="text-[9px] uppercase font-bold text-[var(--st-text-muted)] block">डीप फोकस समय</span>
+              <span id="metricFocusDeskTime" class="text-xl font-black font-mono text-emerald-500 mt-0.5 block">0m</span>
             </div>
           </div>
 
@@ -796,30 +593,20 @@
             <button onclick="logSessionTimeToSubject()" class="px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-600 text-white flex-shrink-0">लॉग +</button>
           </div>
 
-          <!-- SUITE 2: 3-Track Ambient Sound Mixer with Volume Sliders -->
-          <div class="pt-2 border-t border-[var(--st-border)] space-y-2 text-left">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-[var(--st-text-head)] flex items-center gap-1.5">
-                <span>🎧</span> <span>3-ट्रैक न्यूरो एंबिएंट मिक्सर (Mixer 4.0)</span>
-              </span>
-              <button onclick="stopAmbientSound()" class="text-[10px] text-rose-500 font-bold hover:underline">म्यूट ऑल</button>
+          <!-- Neuro-Ambient Noise Strip -->
+          <div class="pt-2 border-t border-[var(--st-border)] flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[11px] font-bold text-[var(--st-text-muted)]">🎧 साउंड:</span>
+              <div class="flex items-center gap-0.5 h-3 px-1 rounded st-subtle">
+                <span class="st-sound-bar"></span><span class="st-sound-bar"></span><span class="st-sound-bar"></span>
+              </div>
             </div>
-            <div class="grid grid-cols-3 gap-2 text-[10px] font-mono">
-              <!-- Track 1: Rain -->
-              <div class="p-2 rounded-xl st-subtle space-y-1">
-                <div class="flex justify-between"><span>🌧️ बारिश</span><span id="lblRainVol">20%</span></div>
-                <input type="range" min="0" max="1" step="0.05" value="0.2" oninput="adjustMultiTrackVolume('rain', this.value)" class="w-full accent-sky-500 cursor-pointer h-1.5">
-              </div>
-              <!-- Track 2: Brown Noise -->
-              <div class="p-2 rounded-xl st-subtle space-y-1">
-                <div class="flex justify-between"><span>🌊 ब्राउन</span><span id="lblBrownVol">0%</span></div>
-                <input type="range" min="0" max="1" step="0.05" value="0" oninput="adjustMultiTrackVolume('brown', this.value)" class="w-full accent-sky-500 cursor-pointer h-1.5">
-              </div>
-              <!-- Track 3: 40Hz Gamma -->
-              <div class="p-2 rounded-xl st-subtle space-y-1">
-                <div class="flex justify-between"><span>🧠 40Hz</span><span id="lblBinauralVol">0%</span></div>
-                <input type="range" min="0" max="1" step="0.05" value="0" oninput="adjustMultiTrackVolume('binaural', this.value)" class="w-full accent-sky-500 cursor-pointer h-1.5">
-              </div>
+            <div class="flex items-center gap-1 overflow-x-auto no-scrollbar">
+              <button onclick="toggleAmbientSound('rain')" id="ambBtnRain" class="px-2 py-1 rounded-lg st-subtle text-[10px] font-bold">🌧️ बारिश</button>
+              <button onclick="toggleAmbientSound('brownnoise')" id="ambBtnBrown" class="px-2 py-1 rounded-lg st-subtle text-[10px] font-bold">🌊 ब्राउन</button>
+              <button onclick="toggleAmbientSound('whitenoise')" id="ambBtnWhite" class="px-2 py-1 rounded-lg st-subtle text-[10px] font-bold">📻 व्हाइट</button>
+              <button onclick="toggleAmbientSound('binaural')" id="ambBtnBinaural" class="px-2 py-1 rounded-lg st-subtle text-[10px] font-bold">🧠 40Hz</button>
+              <button onclick="toggleAmbientSound('alpha')" id="ambBtnAlpha" class="px-2 py-1 rounded-lg st-subtle text-[10px] font-bold">✨ 10Hz</button>
             </div>
           </div>
 
@@ -841,18 +628,6 @@
 
       <!-- ================= TAB 4: MOCK TEST & PYQ LOG ================= -->
       <section id="tabContentMocks" class="hidden space-y-4">
-        <!-- SUITE 4: Cutoff Prediction & Speed Gauge Strip -->
-        <div class="st-glass p-3.5 rounded-2xl grid grid-cols-2 gap-2 text-xs text-center border border-indigo-500/25">
-          <div class="p-2 rounded-xl st-subtle">
-            <span class="text-[9px] uppercase font-bold text-[var(--st-text-muted)] block">कटऑफ क्लीयरेंस प्रायिकता</span>
-            <span id="metricCutoffProbGauge" class="text-base font-black font-mono text-indigo-500 mt-0.5 block">82% Safe Zone</span>
-          </div>
-          <div class="p-2 rounded-xl st-subtle">
-            <span class="text-[9px] uppercase font-bold text-[var(--st-text-muted)] block">हल करने की गति (Speed)</span>
-            <span id="metricQuestionsPerMin" class="text-base font-black font-mono text-emerald-500 mt-0.5 block">1.4 Qs/min</span>
-          </div>
-        </div>
-
         <div class="st-glass p-4 rounded-2xl space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-black text-[var(--st-text-head)] flex items-center gap-1.5">
@@ -923,20 +698,6 @@
             <span id="feynmanCardCount" class="text-xs font-mono font-bold px-2 py-0.5 rounded-lg bg-sky-500/10 text-sky-500">0 Cards</span>
           </div>
 
-          <!-- SUITE 6: Audio Voice Memo Simulator & Jargon Buster -->
-          <div class="p-2.5 rounded-xl st-subtle flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2">
-              <span class="text-lg">🎙️</span>
-              <div>
-                <span class="font-bold text-[var(--st-text-head)] block text-[11px]">वॉइस रिकॉल मेमो</span>
-                <span class="text-[9px] text-[var(--st-text-muted)]" id="lblAudioMemoStatus">बोलकर याद करें व टेस्ट करें</span>
-              </div>
-            </div>
-            <button onclick="toggleVoiceRecallSimulator()" id="btnVoiceMemoTrigger" class="px-3 py-1 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 text-[10px] font-black active:scale-95">
-              🎙️ रिकॉर्ड शुरू
-            </button>
-          </div>
-
           <div class="space-y-2.5">
             <select id="selectFeynmanSubject" class="w-full px-3 py-2 rounded-xl st-subtle text-xs font-bold outline-none text-[var(--st-text-head)]"></select>
             <input type="text" id="inputFeynmanTopic" placeholder="कठिन टॉपिक (उदा. अनुच्छेद 21 / Bayes Theorem)" class="w-full px-3 py-2 rounded-xl st-subtle text-xs outline-none">
@@ -977,34 +738,6 @@
             <span id="warroomReadinessScore" class="text-base font-black font-mono text-amber-500">0%</span>
           </div>
           <p class="text-[11px] text-[var(--st-text-muted)]">कमजोर अध्यायों, छूटे टॉपिक्स व अंतिम 48-घंटे रिवीजन चेकलिस्ट का विश्लेषण</p>
-        </div>
-
-        <!-- SUITE 5: 48-Hour Exam Kit & Admit Card Auditor -->
-        <div class="st-glass p-3.5 rounded-2xl space-y-2 text-xs">
-          <div class="flex items-center justify-between">
-            <h4 class="font-black text-[11px] uppercase tracking-wider text-sky-600 dark:text-sky-400 flex items-center gap-1.5">
-              <span>🎒</span> अंतिम 48-घंटे प्री-एग्जाम किट ऑडिट
-            </h4>
-            <span id="lblKitAuditProgress" class="text-[9px] font-mono font-bold text-emerald-500">0/4 तैयार</span>
-          </div>
-          <div class="space-y-1.5 text-[11px] font-medium">
-            <label class="flex items-center gap-2 p-2 rounded-xl st-subtle cursor-pointer">
-              <input type="checkbox" onchange="toggleKitItem(0)" id="kitCheck0" class="w-4 h-4 accent-sky-500 rounded">
-              <span>🖨️ एडमिट कार्ड की 2 कलर प्रतियां प्रिंटेड</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl st-subtle cursor-pointer">
-              <input type="checkbox" onchange="toggleKitItem(1)" id="kitCheck1" class="w-4 h-4 accent-sky-500 rounded">
-              <span>🪪 मूल सरकारी पहचान पत्र (Aadhaar / Voter ID)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl st-subtle cursor-pointer">
-              <input type="checkbox" onchange="toggleKitItem(2)" id="kitCheck2" class="w-4 h-4 accent-sky-500 rounded">
-              <span>🖊️ पारदर्शी पेन, पासपोर्ट साइज फोटो व किट</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl st-subtle cursor-pointer">
-              <input type="checkbox" onchange="toggleKitItem(3)" id="kitCheck3" class="w-4 h-4 accent-sky-500 rounded">
-              <span>📍 परीक्षा केंद्र की लोकेशन व यात्रा समय मैप पर सत्यापित</span>
-            </label>
-          </div>
         </div>
 
         <!-- 4-Quadrant Matrix (Compact Mobile Cards) -->
@@ -1121,8 +854,8 @@
 
     </main>
 
-    <!-- NATIVE FIXED BOTTOM TAB BAR (TOUCH-OPTIMIZED & PERMANENTLY VISIBLE) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-[var(--st-card)]/95 backdrop-blur-md border-t border-[var(--st-border)] px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_24px_rgba(0,0,0,0.1)] transform-gpu">
+    <!-- NATIVE FIXED BOTTOM TAB BAR (TOUCH-OPTIMIZED) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-[var(--st-card)]/95 backdrop-blur-md border-t border-[var(--st-border)] px-1.5 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-2xl">
       <div class="flex items-center justify-between max-w-md mx-auto overflow-x-auto no-scrollbar gap-1">
         <button type="button" onclick="switchTab('matrix')" id="navBtn_matrix" class="flex flex-col items-center justify-center gap-0.5 text-sky-500 py-1 px-2 rounded-xl transition-all flex-shrink-0 active:scale-95">
           <span class="text-xl leading-none">📋</span>
@@ -1161,10 +894,10 @@
       </div>
     </nav>
 
-    <!-- ================= ALL MODALS & DRAWERS (RETAINED WITH z-[1050]) ================= -->
+    <!-- ================= ALL MODALS & DRAWERS (RETAINED) ================= -->
 
     <!-- MODAL 1: ADD NEW SUBJECT -->
-    <div id="modalAddSubject" class="fixed inset-0 z-[1050] bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)]">
+    <div id="modalAddSubject" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md space-y-3 st-animate-fade">
         <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
           <h3 id="modalAddHeading" class="font-display font-black text-sm text-[var(--st-text-head)]">नया परीक्षा सिलेबस व विषय जोड़ें</h3>
@@ -1230,7 +963,7 @@
     </div>
 
     <!-- MODAL 2: MANAGE SUBJECTS DRAWER -->
-    <div id="modalManageDrawer" class="fixed inset-0 z-[1050] bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)]">
+    <div id="modalManageDrawer" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md max-h-[80vh] flex flex-col space-y-3 st-animate-fade">
         <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
           <div>
@@ -1248,7 +981,7 @@
     </div>
 
     <!-- MODAL 3: QR CODE -->
-    <div id="modalQRCode" class="fixed inset-0 z-[1050] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="modalQRCode" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
       <div class="st-glass rounded-3xl p-5 w-full max-w-xs text-center space-y-3 st-animate-fade">
         <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
           <h3 class="font-display font-black text-sm text-[var(--st-text-head)]">📱 मोबाइल पर खोलें</h3>
@@ -1263,7 +996,7 @@
     </div>
 
     <!-- MODAL 4: ONBOARDING PROFILE SETUP -->
-    <div id="modalExamSetup" class="fixed inset-0 z-[1050] bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="modalExamSetup" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
       <div class="st-glass rounded-3xl p-5 w-full max-w-sm space-y-3 st-animate-fade">
         <div class="text-center">
           <div class="w-12 h-12 mx-auto mb-1 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center text-white text-xl">🎯</div>
@@ -1317,7 +1050,7 @@
     </div>
 
     <!-- MODAL 5: DAILY NOTES -->
-    <div id="modalDailyNotes" class="fixed inset-0 z-[1050] bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)]">
+    <div id="modalDailyNotes" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md space-y-3 st-animate-fade">
         <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
           <h3 class="font-display font-black text-sm text-[var(--st-text-head)]">📓 आज के नोट्स व दैनिक लक्ष्य</h3>
@@ -1330,7 +1063,7 @@
     </div>
 
     <!-- MODAL 6: MICRO-TOPIC CHAPTERS -->
-    <div id="modalTopicManager" class="fixed inset-0 z-[1050] bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)]">
+    <div id="modalTopicManager" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md max-h-[80vh] flex flex-col space-y-3 st-animate-fade">
         <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
           <div>
@@ -1369,7 +1102,7 @@
     </div>
 
     <!-- MODAL 7: SHORTCUTS -->
-    <div id="modalShortcuts" class="fixed inset-0 z-[1050] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="modalShortcuts" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
       <div class="st-glass rounded-3xl p-5 w-full max-w-xs space-y-2.5 text-xs st-animate-fade">
         <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
           <h3 class="font-display font-black text-sm text-[var(--st-text-head)]">⌨️ कीबोर्ड शॉर्टकट्स</h3>
@@ -1385,7 +1118,7 @@
     </div>
 
     <!-- MODAL 8: MANDATORY TOPIC & PAGE LOGGING MODAL -->
-    <div id="modalTopicStudyLog" class="fixed inset-0 z-[1050] bg-black/85 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)]">
+    <div id="modalTopicStudyLog" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md space-y-3 st-animate-fade">
         <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
           <div>
@@ -1431,129 +1164,8 @@
       </div>
     </div>
 
-    <!-- MODAL 9: READ-ONLY PAST DAY HISTORY PREVIEW MODAL -->
-    <div id="modalDayHistory" class="fixed inset-0 z-[1050] bg-black/85 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)]">
-      <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md max-h-[85vh] flex flex-col space-y-3.5 st-animate-fade border border-[var(--st-border)] shadow-2xl">
-        <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">📜</span>
-            <div>
-              <h3 class="font-display font-black text-sm text-[var(--st-text-head)] flex items-center gap-1.5">
-                <span>अध्ययन इतिहास (Study History)</span>
-                <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/25 font-bold uppercase">🔒 Read-Only</span>
-              </h3>
-              <p class="text-[11px] text-sky-500 font-mono font-bold" id="lblHistoryTargetDate">Day History</p>
-            </div>
-          </div>
-          <button onclick="closeDayHistoryModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
-        </div>
-
-        <!-- Past Day Telemetry Metrics Summary (Energy, Sleep, PYQ) -->
-        <div class="grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="p-2 rounded-xl st-subtle">
-            <span class="text-[9px] font-bold text-[var(--st-text-muted)] block uppercase">माइंडसेट</span>
-            <span id="histEnergyBadge" class="font-bold text-[11px] block mt-0.5">--</span>
-          </div>
-          <div class="p-2 rounded-xl st-subtle">
-            <span class="text-[9px] font-bold text-[var(--st-text-muted)] block uppercase">नींद (Sleep)</span>
-            <span id="histSleepBadge" class="font-mono font-bold text-[11px] block mt-0.5">--</span>
-          </div>
-          <div class="p-2 rounded-xl st-subtle">
-            <span class="text-[9px] font-bold text-[var(--st-text-muted)] block uppercase">PYQ अभ्यास</span>
-            <span id="histPyqBadge" class="font-mono font-bold text-[11px] text-emerald-500 block mt-0.5">0 Solved</span>
-          </div>
-        </div>
-
-        <!-- Daily Reflection Note if exists -->
-        <div id="histNotesContainer" class="p-2.5 rounded-xl st-subtle text-xs border border-dashed border-[var(--st-border)] hidden">
-          <span class="text-[10px] font-bold uppercase text-[var(--st-text-muted)] flex items-center gap-1 mb-1">
-            <span>📓</span> <span>उस दिन के नोट्स (Reflection Notes):</span>
-          </span>
-          <p id="histNotesText" class="text-xs text-[var(--st-text-head)] italic leading-relaxed"></p>
-        </div>
-
-        <!-- Subjects & Detailed Topics Covered list -->
-        <div class="flex-1 overflow-y-auto no-scrollbar space-y-2 pr-0.5">
-          <h4 class="text-[10px] font-black uppercase tracking-wider text-[var(--st-text-muted)] px-1">
-            उस दिन पूर्ण किए गए विषय व टॉपिक लेजर:
-          </h4>
-          <div id="histSubjectsListContainer" class="space-y-2">
-            <!-- Populated dynamically via JS -->
-          </div>
-        </div>
-
-        <div class="pt-2 border-t border-[var(--st-border)] flex items-center justify-between text-xs">
-          <span class="text-[10px] text-[var(--st-text-muted)]">🔒 पूर्व रिकॉर्ड सुरक्षित है (No Editing)</span>
-          <button onclick="closeDayHistoryModal()" class="px-4 py-1.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-sm">
-            बंद करें (Close)
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- SUITE 6 & 7: FORMULA VAULT MODAL (NEW) -->
-    <div id="modalVault" class="fixed inset-0 z-[1050] bg-black/85 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pb-[env(safe-area-inset-bottom,0px)]">
-      <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md max-h-[85vh] flex flex-col space-y-3 st-animate-fade border border-[var(--st-border)]">
-        <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">📑</span>
-            <div>
-              <h3 class="font-display font-black text-sm text-[var(--st-text-head)]">हाई-यील्ड फॉर्मूला व फैक्ट्स वॉल्ट</h3>
-              <p class="text-[10px] text-sky-500 font-bold" id="lblVaultCount">0 Formulas Stored</p>
-            </div>
-          </div>
-          <button onclick="closeVaultModal()" class="text-slate-400 text-lg">✕</button>
-        </div>
-
-        <!-- Add New Formula Strip -->
-        <div class="space-y-2">
-          <div class="grid grid-cols-2 gap-2">
-            <input type="text" id="inputVaultTitle" placeholder="फॉर्मूला / फैक्ट नाम (उदा. Compound Interest)" class="w-full px-3 py-2 rounded-xl st-subtle text-xs outline-none">
-            <input type="text" id="inputVaultSubject" placeholder="विषय (Maths/Polity)" class="w-full px-3 py-2 rounded-xl st-subtle text-xs outline-none">
-          </div>
-          <textarea id="inputVaultContent" rows="2" placeholder="सूत्र या शॉर्ट ट्रिक लिखें: A = P(1 + r/n)^(nt)..." class="w-full p-2.5 rounded-xl st-subtle text-xs outline-none font-mono resize-none"></textarea>
-          <button onclick="saveFormulaToVault()" class="w-full py-2 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-black text-xs shadow-sm active:scale-95">
-            तिजोरी में सुरक्षित करें +
-          </button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto no-scrollbar space-y-2 pt-2 border-t border-[var(--st-border)]" id="vaultCardsContainer">
-          <!-- Cards rendered dynamically -->
-        </div>
-
-        <div class="pt-2 border-t border-[var(--st-border)] flex justify-end">
-          <button onclick="closeVaultModal()" class="px-4 py-1.5 rounded-xl bg-blue-600 text-white font-bold text-xs">पूर्ण (Done)</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- SUITE 7: ASPIRANT TROPHY CASE & RPG MODAL (NEW) -->
-    <div id="modalTrophyCase" class="fixed inset-0 z-[1050] bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
-      <div class="st-glass rounded-3xl p-5 w-full max-w-sm space-y-3 st-animate-fade border border-amber-500/30 text-center">
-        <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
-          <h3 class="font-display font-black text-sm text-[var(--st-text-head)] flex items-center gap-1.5">
-            <span>🏆</span> <span>एस्पिरेंट अचीवमेंट ट्रॉफी केस</span>
-          </h3>
-          <button onclick="closeTrophyCaseModal()" class="text-slate-400 text-lg">✕</button>
-        </div>
-
-        <div class="p-3 rounded-2xl st-subtle space-y-1">
-          <span class="text-2xl font-black font-display text-amber-500" id="modalXpTotal">0 XP</span>
-          <p class="text-[10px] text-[var(--st-text-muted)] font-mono" id="modalXpRankName">Level: Novice Aspirant</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 text-left text-xs" id="trophiesListContainer">
-          <!-- Dynamically populated badges -->
-        </div>
-
-        <button onclick="closeTrophyCaseModal()" class="w-full py-2 rounded-xl bg-amber-500 text-white font-black text-xs shadow-md">
-          जारी रखें ➔
-        </button>
-      </div>
-    </div>
-
     <!-- IN-APP FLOATING TOAST -->
-    <div id="inAppToast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-[1100] translate-y-10 opacity-0 pointer-events-none transition-all duration-300 px-4 py-2.5 rounded-2xl bg-slate-900/90 text-white border border-sky-500/40 shadow-2xl flex items-center gap-2 text-xs font-bold whitespace-nowrap">
+    <div id="inAppToast" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 translate-y-10 opacity-0 pointer-events-none transition-all duration-300 px-4 py-2.5 rounded-2xl bg-slate-900/90 text-white border border-sky-500/40 shadow-2xl flex items-center gap-2 text-xs font-bold whitespace-nowrap">
       <span id="toastIcon">💡</span>
       <span id="toastMsg">Action completed!</span>
     </div>
@@ -1790,34 +1402,15 @@
     let studentName = localStorage.getItem('st_student_name') || 'Aspirant';
     let targetExamName = localStorage.getItem('st_target_exam_name') || '';
     let targetExamDate = localStorage.getItem('st_target_exam_date') || '';
-    let targetExamDays = parseInt(localStorage.getItem('st_target_exam_days') || '30');
     let targetManifesto = localStorage.getItem('st_target_manifesto') || 'AIR Under 100 / Dream Service';
     let selectedRecallClarity = 5;
     let streakShields = parseInt(localStorage.getItem('st_streak_shields') || '2');
-    let dailyWaterGlasses = parseInt(localStorage.getItem('st_water_glasses') || '0');
-    let activeSubjectCategoryFilter = 'all';
-    let subjectSearchQuery = '';
-
-    // SUITE 1-8 NEW STATE VARIABLES
-    let aspirantXP = parseInt(localStorage.getItem('st_aspirant_xp') || '120');
-    let dailySunlightMinutes = parseInt(localStorage.getItem('st_sunlight_mins') || '0');
-    let dailyDistractionStrikes = parseInt(localStorage.getItem('st_distract_strikes') || '0');
-    let formulaVault = [];
-    let isVoiceRecording = false;
-    let multiTrackSources = { rain: null, brown: null, binaural: null };
-    let multiTrackGains = { rain: null, brown: null, binaural: null };
 
     let chartTrend = null;
     let chartDoughnut = null;
     let chartRadar = null;
     let chartWeekly = null;
     let chartMocks = null;
-
-    // SAFE DOM HELPER TO PREVENT NULL CRASHES
-    function safeText(id, val) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val;
-    }
 
     let audioCtx = null;
     function getAudioContext() {
@@ -1862,200 +1455,26 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      try {
-        loadSavedPrefs();
-        applyAppTheme();
-        startLiveDeviceClock();
-        updateStaticTexts();
-        loadActiveMonthState();
-        loadVaultState();
-        renderAllComponents();
-        initializeCharts();
-        refreshMetricsAndCharts();
-        renderMocksSection();
-        populateFocusSubjectOptions();
-        setupGlobalHotkeys();
-        updateStudentNameDisplay();
-        updateXpAndTrophiesUI();
-        initKitAuditorUI();
+      loadSavedPrefs();
+      applyAppTheme();
+      startLiveDeviceClock();
+      updateStaticTexts();
+      loadActiveMonthState();
+      renderAllComponents();
+      initializeCharts();
+      refreshMetricsAndCharts();
+      renderMocksSection();
+      populateFocusSubjectOptions();
+      setupGlobalHotkeys();
+      updateStudentNameDisplay();
 
-        if (!targetExamName || !targetExamDate || !localStorage.getItem('st_student_name')) {
-          openExamSetupModal(true);
-        } else {
-          updateExamDisplayInfo();
-          startExamCountdown();
-        }
-      } catch (err) {
-        console.error('Boot error caught safely:', err);
+      if (!targetExamName || !targetExamDate || !localStorage.getItem('st_student_name')) {
+        openExamSetupModal(true);
+      } else {
+        updateExamDisplayInfo();
+        startExamCountdown();
       }
     });
-
-    // ================= MOBILE DAYS CAROUSEL & CARDS =================
-    function renderMobileDaysCarousel() {
-      const container = document.getElementById('mobileDaysContainer');
-      if (!container) return;
-      const totalDays = getTotalPlanDays();
-      const isCur = new Date().getFullYear() === currentYear && new Date().getMonth() === currentMonth;
-      const realToday = isCur ? new Date().getDate() : 1;
-
-      let html = '';
-      for (let day = 1; day <= totalDays; day++) {
-        const dObj = new Date(currentYear, currentMonth, day);
-        const dayStr = WEEK_DAYS[currentLang][dObj.getDay()];
-        const isToday = day === realToday;
-        const isPast = day < realToday;
-
-        html += `
-          <div onclick="${isPast ? `openDayHistoryModal(${day})` : ''}" class="flex-shrink-0 flex flex-col items-center justify-center w-12 py-2 px-1 rounded-2xl text-center select-none transition-all ${
-            isToday 
-              ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40 ring-2 ring-sky-300 scale-105 font-black' 
-              : (isPast ? 'st-subtle text-[var(--st-text-head)] cursor-pointer hover:border-sky-500 font-semibold' : 'st-subtle text-[var(--st-text-muted)] opacity-40 font-medium')
-          }">
-            <span class="text-[9px] uppercase tracking-tight block">${dayStr}</span>
-            <span class="text-sm font-mono block">${day}</span>
-            <span class="text-[8px] mt-0.5 block">${isToday ? 'LIVE' : (isPast ? '📜' : '🔒')}</span>
-          </div>
-        `;
-      }
-      container.innerHTML = html;
-    }
-
-    function renderMobileCards() {
-      const container = document.getElementById('mobileCardsContainer');
-      if (!container) return;
-      const totalDays = getTotalPlanDays();
-      const isCur = new Date().getFullYear() === currentYear && new Date().getMonth() === currentMonth;
-      const realToday = isCur ? new Date().getDate() : 1;
-
-      let items = appState.items || [];
-      if (activeSubjectCategoryFilter !== 'all') {
-        items = items.filter(it => it.cat && it.cat.toLowerCase().includes(activeSubjectCategoryFilter.toLowerCase()));
-      }
-      if (subjectSearchQuery.trim()) {
-        const q = subjectSearchQuery.toLowerCase();
-        items = items.filter(it => it.name.toLowerCase().includes(q) || (it.cat && it.cat.toLowerCase().includes(q)));
-      }
-
-      if (items.length === 0) {
-        container.innerHTML = `
-          <div class="p-6 text-center st-glass rounded-2xl border border-dashed border-[var(--st-border)] space-y-2">
-            <span class="text-3xl block">📚</span>
-            <p class="font-bold text-xs text-[var(--st-text-head)]">कोई परीक्षा विषय नहीं मिला</p>
-            <p class="text-[11px] text-[var(--st-text-muted)]">ऊपर <b>+</b> बटन दबाकर नया विषय जोड़ें या फ़िल्टर रीसेट करें।</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = items.map(item => {
-        const checks = appState.checks[item.id] || {};
-        const isChecked = !!checks[realToday];
-        const doneDays = Object.values(checks).filter(Boolean).length;
-        const goal = item.goal || 25;
-        const pct = Math.min(100, Math.round((doneDays / goal) * 100));
-
-        return `
-          <div class="st-glass p-3 rounded-2xl flex items-center justify-between gap-3 shadow-sm border border-[var(--st-border)]">
-            <div class="flex items-center gap-2.5 truncate flex-1" onclick="openTopicModal('${item.id}')">
-              <span class="text-2xl st-float-icon">${item.icon || '📌'}</span>
-              <div class="truncate">
-                <h4 class="font-bold text-xs text-[var(--st-text-head)] truncate">${item.name}</h4>
-                <div class="flex items-center gap-1.5 text-[10px] text-[var(--st-text-muted)] mt-0.5 font-mono">
-                  <span class="text-sky-500 font-bold">${item.cat || 'General'}</span>
-                  <span>•</span>
-                  <span>${doneDays}/${goal}d</span>
-                  <span>•</span>
-                  <span class="font-black ${pct >= 80 ? 'text-emerald-500' : 'text-sky-500'}">${pct}%</span>
-                </div>
-              </div>
-            </div>
-
-            <input type="checkbox" class="st-checkbox flex-shrink-0" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${item.id}', ${realToday}, this.checked)">
-          </div>
-        `;
-      }).join('');
-    }
-
-    function filterSubjectsByCategory(cat) {
-      activeSubjectCategoryFilter = cat;
-      ['all', 'Quant', 'Reasoning', 'GS', 'Revision'].forEach(c => {
-        const btn = document.getElementById(`fltBtn_${c}`);
-        if (!btn) return;
-        if (c.toLowerCase() === cat.toLowerCase()) {
-          btn.className = "px-3 py-1 rounded-xl bg-sky-500 text-white flex-shrink-0 text-[11px]";
-        } else {
-          btn.className = "px-3 py-1 rounded-xl st-subtle text-[var(--st-text-muted)] flex-shrink-0 text-[11px]";
-        }
-      });
-      renderMobileCards();
-      playHapticPop(480, 'sine', 0.04);
-    }
-
-    function handleSubjectSearch(query) {
-      subjectSearchQuery = query || '';
-      renderMobileCards();
-    }
-
-    function useStreakFreezeShield() {
-      if (streakShields > 0) {
-        streakShields--;
-        localStorage.setItem('st_streak_shields', streakShields.toString());
-        safeText('shieldCount', streakShields.toString());
-        playHapticPop(650, 'sine', 0.1);
-        showInAppToast('🛡️ स्ट्रीक फ्रीज शील्ड सक्रिय! आपकी स्ट्रीक सुरक्षित है।', '🛡️');
-      } else {
-        showInAppToast('कोई शील्ड शेष नहीं है!', '⚠️');
-      }
-    }
-
-    // ================= READ-ONLY DAY HISTORY MODAL =================
-    function openDayHistoryModal(day) {
-      safeText('lblHistoryTargetDate', `Day ${day} (${day} ${MONTH_NAMES[currentLang][currentMonth]} ${currentYear})`);
-      const energy = (appState.dailyEnergy && appState.dailyEnergy[day]) || 'सामान्य';
-      const sleep = (appState.dailySleep && appState.dailySleep[day]) || '7h';
-      const pyq = (appState.dailyPyqDetail && appState.dailyPyqDetail[day]?.correct) || 0;
-      const note = (appState.dailyNotes && appState.dailyNotes[day]) || '';
-
-      safeText('histEnergyBadge', energy.toUpperCase());
-      safeText('histSleepBadge', `${sleep}h`);
-      safeText('histPyqBadge', `${pyq} Solved`);
-
-      const noteBox = document.getElementById('histNotesContainer');
-      const noteText = document.getElementById('histNotesText');
-      if (note && note.trim()) {
-        noteBox.classList.remove('hidden');
-        noteText.textContent = note;
-      } else {
-        noteBox.classList.add('hidden');
-      }
-
-      const listContainer = document.getElementById('histSubjectsListContainer');
-      let studiedItems = [];
-      (appState.items || []).forEach(it => {
-        if (appState.checks[it.id] && appState.checks[it.id][day]) studiedItems.push(it);
-      });
-
-      if (studiedItems.length === 0) {
-        listContainer.innerHTML = `<div class="p-4 text-center text-xs text-[var(--st-text-muted)] st-subtle rounded-2xl">इस दिन कोई विषय पूरा नहीं किया गया था।</div>`;
-      } else {
-        listContainer.innerHTML = studiedItems.map(it => `
-          <div class="p-2.5 rounded-xl st-subtle flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2">
-              <span>${it.icon || '📖'}</span>
-              <span class="font-bold text-[var(--st-text-head)]">${it.name}</span>
-            </div>
-            <span class="text-emerald-500 font-bold font-mono text-[10px]">✓ Verified Done</span>
-          </div>
-        `).join('');
-      }
-
-      document.getElementById('modalDayHistory').classList.remove('hidden');
-      playHapticPop(480, 'sine', 0.05);
-    }
-
-    function closeDayHistoryModal() {
-      document.getElementById('modalDayHistory').classList.add('hidden');
-    }
 
     function setupGlobalHotkeys() {
       window.addEventListener('keydown', (e) => {
@@ -2691,13 +2110,6 @@
 
     function daysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
 
-    function getTotalPlanDays() {
-      if (targetExamDays && targetExamDays > 0) {
-        return Math.min(365, targetExamDays);
-      }
-      return daysInMonth(currentYear, currentMonth);
-    }
-
     function checkSpacedRepetitionDue(checks, realToday) {
       for (let prevDay of [realToday - 1, realToday - 7, realToday - 30]) {
         if (prevDay >= 1 && checks[prevDay] && !checks[realToday]) return true;
@@ -2741,349 +2153,110 @@
       renderRevisionQueueBanner();
       renderSpacedRepetitionSuperAlert();
       updateStudentNameDisplay();
-      updateWaterCounterDisplay();
     }
 
-    // ================= NEW ADVANCED ULTRA FEATURES =================
-    function logWaterGlass(delta = 1) {
-      dailyWaterGlasses = Math.max(0, Math.min(16, dailyWaterGlasses + delta));
-      localStorage.setItem('st_water_glasses', dailyWaterGlasses.toString());
-      updateWaterCounterDisplay();
-      playHapticPop(620, 'sine', 0.05);
-      if (dailyWaterGlasses === 8) {
-        if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50 });
-        showInAppToast('💧 8 ग्लास पानी का दैनिक लक्ष्य पूरा हुआ! ब्रेन हाइड्रेटेड है।', '🎉');
-      }
-    }
+    function renderMobileDaysCarousel() {
+      const totalDays = daysInMonth(currentYear, currentMonth);
+      const realToday = new Date().getDate();
+      mobileActiveDay = realToday;
 
-    function updateWaterCounterDisplay() {
-      const el = document.getElementById('lblWaterCount');
-      if (el) el.textContent = `${dailyWaterGlasses} / 8 ग्लास पिए`;
-    }
-
-    function triggerEyeRelaxAlert() {
-      playHapticPop(520, 'sine', 0.1);
-      showInAppToast('👀 20-20-20 नियम: 20 सेकंड के लिए 20 फीट दूर किसी वस्तु को देखें। आंखों को आराम दें!', '🌿');
-    }
-
-    // ================= SUITE 1: BIO-RHYTHM & NEURO-WELLNESS =================
-    function setDailyStress(level) {
-      localStorage.setItem('st_daily_stress', level);
-      playHapticPop(480, 'sine', 0.05);
-      showInAppToast(`तनाव स्तर दर्ज: ${level.toUpperCase()}`);
-    }
-
-    function triggerPostureCheck() {
-      playHapticPop(600, 'sine', 0.08);
-      showInAppToast('🧘 पोस्चर चेक: कंधों को पीछे करें, रीढ़ सीधी रखें और गहरी सांस लें!', '✨');
-    }
-
-    function logSunlightExposure(mins = 15) {
-      dailySunlightMinutes += mins;
-      localStorage.setItem('st_sunlight_mins', dailySunlightMinutes.toString());
-      document.getElementById('lblSunlightMinutes').textContent = dailySunlightMinutes.toString();
-      addAspirantXP(10, 'Sunlight Wellness');
-      playHapticPop(620, 'sine', 0.05);
-      showInAppToast(`☀️ ${mins} मिनट धूप दर्ज! सेरोटोनिन व मेलाटोनिन बैलेंस।`);
-    }
-
-    // ================= SUITE 2: DEEP WORK 4.0 & MULTI-TRACK AUDIO =================
-    let fiveSecTimer = null;
-    function start5SecondLaunch() {
-      let count = 5;
-      const btn = document.getElementById('btn5SecLaunch');
-      const text = document.getElementById('lbl5SecText');
-      if (fiveSecTimer) clearInterval(fiveSecTimer);
-
-      fiveSecTimer = setInterval(() => {
-        if (count > 0) {
-          text.textContent = `काउंटडाउन: ${count}... तैयार!`;
-          playHapticPop(500 + (count * 40), 'sine', 0.06);
-          count--;
-        } else {
-          clearInterval(fiveSecTimer);
-          text.textContent = '🚀 एक्शन शुरू!';
-          playHapticPop(800, 'sine', 0.2);
-          if (!timerRunning) toggleTimerPlay();
-          showInAppToast('🚀 5-Sec Launch: पढ़ाई तुरंत शुरू करें!');
-        }
-      }, 1000);
-    }
-
-    function recordDistractionStrike() {
-      dailyDistractionStrikes++;
-      localStorage.setItem('st_distract_strikes', dailyDistractionStrikes.toString());
-      document.getElementById('lblDistractionStrikes').textContent = dailyDistractionStrikes.toString();
-      playHapticPop(320, 'sawtooth', 0.1);
-      showInAppToast('🫙 1 भटकाव स्ट्राइक दर्ज! फोन को तुरंत दूर रखें।', '⚠️');
-    }
-
-    function adjustMultiTrackVolume(track, volume) {
-      const vol = parseFloat(volume);
-      const ctx = getAudioContext();
-
-      if (track === 'rain') document.getElementById('lblRainVol').textContent = `${Math.round(vol * 100)}%`;
-      if (track === 'brown') document.getElementById('lblBrownVol').textContent = `${Math.round(vol * 100)}%`;
-      if (track === 'binaural') document.getElementById('lblBinauralVol').textContent = `${Math.round(vol * 100)}%`;
-
-      if (vol <= 0.01) {
-        if (multiTrackSources[track]) {
-          try { multiTrackSources[track].stop(); } catch(e) {}
-          multiTrackSources[track] = null;
-        }
-        return;
-      }
-
-      if (!multiTrackSources[track]) {
-        // Start buffer track
-        const bufferSize = ctx.sampleRate * 2;
-        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        let lastOut = 0.0;
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          if (track === 'brown') {
-            output[i] = (lastOut + (0.02 * white)) / 1.02;
-            lastOut = output[i];
-            output[i] *= 3.5;
-          } else {
-            output[i] = white;
-          }
-        }
-
-        const source = ctx.createBufferSource();
-        source.buffer = noiseBuffer;
-        source.loop = true;
-
-        const filter = ctx.createBiquadFilter();
-        const gain = ctx.createGain();
-
-        if (track === 'rain') { filter.type = 'lowpass'; filter.frequency.value = 850; }
-        if (track === 'brown') { filter.type = 'lowpass'; filter.frequency.value = 320; }
-        if (track === 'binaural') { filter.type = 'lowpass'; filter.frequency.value = 240; }
-
-        source.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-        source.start();
-
-        multiTrackSources[track] = source;
-        multiTrackGains[track] = gain;
-      }
-
-      if (multiTrackGains[track]) {
-        multiTrackGains[track].gain.setValueAtTime(vol, ctx.currentTime);
-      }
-    }
-
-    // ================= SUITE 3: LEITNER & BULK REVISION =================
-    function bulkCompleteDueRevisions() {
-      const todayStr = new Date().toISOString().split('T')[0];
-      const logs = appState.spacedLogs || [];
-      let completedCount = 0;
-
-      logs.forEach(l => {
-        if (!l.rev7Done && l.rev7Date <= todayStr) {
-          l.rev7Done = true;
-          completedCount++;
-        } else if (l.rev7Done && !l.rev30Done && l.rev30Date <= todayStr) {
-          l.rev30Done = true;
-          completedCount++;
-        }
-      });
-
-      if (completedCount > 0) {
-        persistAppState();
-        renderSpacedHubTable();
-        renderSpacedRepetitionSuperAlert();
-        addAspirantXP(completedCount * 25, 'Bulk Revisions');
-        playHapticPop(750, 'sine', 0.2);
-        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 70 });
-        showInAppToast(`🎉 ${completedCount} देय रिवीजन एक साथ पूर्ण किए गए!`, '🏆');
-      } else {
-        showInAppToast('आज कोई पेंडिंग रिवीजन नहीं है।', '✨');
-      }
-    }
-
-    // ================= SUITE 5: 48-HR PRE-EXAM KIT AUDITOR =================
-    function initKitAuditorUI() {
-      const savedKit = JSON.parse(localStorage.getItem('st_exam_kit') || '{}');
-      let done = 0;
-      for (let i = 0; i < 4; i++) {
-        const el = document.getElementById(`kitCheck${i}`);
-        if (el) {
-          el.checked = !!savedKit[i];
-          if (el.checked) done++;
-        }
-      }
-      const progEl = document.getElementById('lblKitAuditProgress');
-      if (progEl) progEl.textContent = `${done}/4 तैयार`;
-    }
-
-    function toggleKitItem(idx) {
-      const savedKit = JSON.parse(localStorage.getItem('st_exam_kit') || '{}');
-      const el = document.getElementById(`kitCheck${idx}`);
-      savedKit[idx] = el ? el.checked : false;
-      localStorage.setItem('st_exam_kit', JSON.stringify(savedKit));
-      initKitAuditorUI();
-      playHapticPop(600, 'sine', 0.05);
-    }
-
-    // ================= SUITE 6: FEYNMAN AUDIO MEMO SIMULATOR & VAULT =================
-    function toggleVoiceRecallSimulator() {
-      isVoiceRecording = !isVoiceRecording;
-      const btn = document.getElementById('btnVoiceMemoTrigger');
-      const status = document.getElementById('lblAudioMemoStatus');
-
-      if (isVoiceRecording) {
-        btn.textContent = '⏹️ स्टॉप';
-        btn.className = "px-3 py-1 rounded-xl bg-rose-500 text-white text-[10px] font-black animate-pulse";
-        status.textContent = '🔴 रिकॉर्डिंग जारी... अपने शब्दों में समझाएं';
-        playHapticPop(700, 'sine', 0.1);
-      } else {
-        btn.textContent = '🎙️ रिकॉर्ड शुरू';
-        btn.className = "px-3 py-1 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 text-[10px] font-black";
-        status.textContent = '✅ वॉइस मेमो तैयार व ट्रांसक्रिप्टेड!';
-        addAspirantXP(20, 'Feynman Voice Recall');
-        playHapticPop(600, 'sine', 0.08);
-      }
-    }
-
-    function openVaultModal() {
-      renderVaultCards();
-      document.getElementById('modalVault').classList.remove('hidden');
-      playHapticPop(500, 'sine', 0.05);
-    }
-    function closeVaultModal() { document.getElementById('modalVault').classList.add('hidden'); }
-
-    function loadVaultState() {
-      const raw = localStorage.getItem('st_formula_vault');
-      if (raw) {
-        try { formulaVault = JSON.parse(raw); } catch(e) { formulaVault = []; }
-      }
-    }
-
-    function saveFormulaToVault() {
-      const title = document.getElementById('inputVaultTitle').value.trim();
-      const subject = document.getElementById('inputVaultSubject').value.trim() || 'General';
-      const content = document.getElementById('inputVaultContent').value.trim();
-
-      if (!title || !content) {
-        showInAppToast('फॉर्मूला नाम व सूत्र दोनों आवश्यक हैं!', '⚠️');
-        return;
-      }
-
-      formulaVault.unshift({ id: 'v_' + Date.now(), title, subject, content });
-      localStorage.setItem('st_formula_vault', JSON.stringify(formulaVault));
-      renderVaultCards();
-      document.getElementById('inputVaultTitle').value = '';
-      document.getElementById('inputVaultContent').value = '';
-      addAspirantXP(15, 'Formula Saved');
-      playHapticPop(650, 'sine', 0.1);
-      showInAppToast('📑 सूत्र तिजोरी में सुरक्षित!');
-    }
-
-    function deleteFormulaFromVault(id) {
-      formulaVault = formulaVault.filter(x => x.id !== id);
-      localStorage.setItem('st_formula_vault', JSON.stringify(formulaVault));
-      renderVaultCards();
-      playHapticPop(380, 'sine', 0.05);
-    }
-
-    function renderVaultCards() {
-      const container = document.getElementById('vaultCardsContainer');
-      const countEl = document.getElementById('lblVaultCount');
-      if (countEl) countEl.textContent = `${formulaVault.length} Formulas Stored`;
+      const container = document.getElementById('mobileDaysContainer');
       if (!container) return;
+      let html = '';
 
-      if (formulaVault.length === 0) {
-        container.innerHTML = `<div class="p-6 text-center text-xs text-[var(--st-text-muted)]">तिजोरी खाली है। परीक्षा के महत्वपूर्ण सूत्र यहाँ जोड़ें।</div>`;
+      for (let day = 1; day <= totalDays; day++) {
+        const dObj = new Date(currentYear, currentMonth, day);
+        const dayStr = WEEK_DAYS[currentLang][dObj.getDay()];
+        const isToday = day === realToday;
+
+        html += `
+          <div class="flex-shrink-0 flex flex-col items-center justify-center w-11 py-2 px-1 rounded-2xl text-center select-none ${
+              isToday 
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/40 ring-2 ring-sky-300 scale-105' 
+                : 'st-subtle text-[var(--st-text-muted)] opacity-40'
+            }">
+            <span class="text-[8px] uppercase font-bold">${dayStr}</span>
+            <span class="text-xs font-black font-mono">${day}</span>
+            <span class="text-[7px] mt-0.5">${isToday ? 'LIVE' : '🔒'}</span>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    function renderMobileCards() {
+      const container = document.getElementById('mobileCardsContainer');
+      if (!container) return;
+      const totalDays = daysInMonth(currentYear, currentMonth);
+
+      if (!appState.items || appState.items.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center text-[var(--st-text-muted)] st-glass rounded-2xl border border-dashed border-[var(--st-border)] space-y-2">
+            <span class="text-3xl block">📚</span>
+            <p class="font-bold text-xs text-[var(--st-text-head)]">कोई परीक्षा सिलेबस नहीं जोड़ा गया</p>
+            <p class="text-[11px]">ऊपर <b>+</b> बटन पर टैप करके अध्ययन योजना बनाएं।</p>
+          </div>
+        `;
         return;
       }
 
-      container.innerHTML = formulaVault.map(v => `
-        <div class="p-3 rounded-2xl st-subtle space-y-1.5 border border-[var(--st-border)] text-xs">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-[var(--st-text-head)]">${v.title}</span>
-            <div class="flex items-center gap-1.5">
-              <span class="text-[9px] px-1.5 py-0.2 rounded bg-sky-500/10 text-sky-500 font-bold">${v.subject}</span>
-              <button onclick="deleteFormulaFromVault('${v.id}')" class="text-rose-500 text-xs">✕</button>
+      container.innerHTML = appState.items.map(item => {
+        const checks = appState.checks[item.id] || {};
+        const isChecked = !!checks[mobileActiveDay];
+
+        let doneCount = 0;
+        for (let d = 1; d <= totalDays; d++) {
+          if (checks[d]) doneCount++;
+        }
+        const goal = item.goal || 25;
+        const pct = Math.min(100, Math.round((doneCount / goal) * 100));
+        const chaps = (appState.microTopics && appState.microTopics[item.id]) || [];
+
+        return `
+          <div class="st-glass p-3 rounded-2xl flex flex-col gap-2 shadow-sm border border-[var(--st-border)] active:scale-[0.99] transition-transform">
+            <div class="flex items-center justify-between gap-2.5">
+              <div class="flex items-center gap-2.5 truncate flex-1">
+                <span class="text-2xl">${item.icon || '📌'}</span>
+                <div class="truncate">
+                  <h4 class="font-bold text-xs text-[var(--st-text-head)] truncate">${item.name}</h4>
+                  <div class="flex items-center gap-1.5 mt-0.5 text-[10px] text-[var(--st-text-muted)]">
+                    <span class="text-sky-500 font-bold">${item.cat || 'General'}</span>
+                    <span>•</span>
+                    <span class="font-mono">${doneCount}/${goal}d</span>
+                    <span>•</span>
+                    <span class="font-black ${pct >= 80 ? 'text-emerald-500' : 'text-sky-500'}">${pct}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <input type="checkbox" 
+                class="st-checkbox flex-shrink-0" 
+                ${isChecked ? 'checked' : ''} 
+                onchange="toggleCheck('${item.id}', ${mobileActiveDay}, this.checked)"
+              />
+            </div>
+
+            <div class="flex items-center justify-between pt-1.5 border-t border-[var(--st-border)] text-[10px] text-[var(--st-text-muted)] font-mono">
+              <span class="text-indigo-500 font-semibold">⏱️ ${item.hours || 1} hrs/day</span>
+              <button onclick="openTopicModal('${item.id}')" class="px-2 py-0.5 rounded-md st-subtle text-sky-500 font-bold">
+                📖 ${chaps.length} Chapters
+              </button>
             </div>
           </div>
-          <p class="font-mono text-xs text-sky-600 dark:text-sky-400 bg-black/5 dark:bg-white/5 p-2 rounded-xl">${v.content}</p>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    // ================= SUITE 7: GAMIFICATION & ASPIRANT RPG =================
-    function addAspirantXP(points, reason = '') {
-      aspirantXP += points;
-      localStorage.setItem('st_aspirant_xp', aspirantXP.toString());
-      updateXpAndTrophiesUI();
-      if (reason) showInAppToast(`+${points} XP: ${reason}! ⚡`);
-    }
-
-    function updateXpAndTrophiesUI() {
-      const xpEl = document.getElementById('headerXpDisplay');
-      if (xpEl) xpEl.textContent = `${aspirantXP} XP`;
-
-      const rankBadge = document.getElementById('badgeRank');
-      let rank = 'Novice Aspirant';
-      if (aspirantXP >= 1000) rank = '⚡ Top 100 Titan';
-      else if (aspirantXP >= 500) rank = '⚔️ Syllabus Slayer';
-      else if (aspirantXP >= 250) rank = '🌟 Dedicated Scholar';
-      if (rankBadge) rankBadge.textContent = rank;
-    }
-
-    function openTrophyCaseModal() {
-      document.getElementById('modalXpTotal').textContent = `${aspirantXP} XP`;
-      let rank = 'Novice Aspirant';
-      if (aspirantXP >= 1000) rank = '⚡ Top 100 Titan';
-      else if (aspirantXP >= 500) rank = '⚔️ Syllabus Slayer';
-      else if (aspirantXP >= 250) rank = '🌟 Dedicated Scholar';
-      document.getElementById('modalXpRankName').textContent = `Rank: ${rank}`;
-
-      const c = document.getElementById('trophiesListContainer');
-      const badges = [
-        { name: "प्रथम कदम", desc: "पहला टॉपिक अध्ययन", unlocked: true },
-        { name: "3-दिन स्ट्रीक", desc: "बिना ब्रेक निरंतरता", unlocked: aspirantXP >= 200 },
-        { name: "मॉक मास्टर", desc: "मॉक टेस्ट व एनालिसिस", unlocked: (appState.mocks || []).length > 0 },
-        { name: "1-7-30 योद्धा", desc: "वैज्ञानिक पुनरावृत्ति", unlocked: (appState.spacedLogs || []).length >= 3 }
-      ];
-
-      c.innerHTML = badges.map(b => `
-        <div class="p-2.5 rounded-2xl st-subtle ${b.unlocked ? 'border-amber-500/40' : 'opacity-40'} space-y-0.5">
-          <span class="text-base">${b.unlocked ? '🏆' : '🔒'}</span>
-          <h5 class="font-bold text-[var(--st-text-head)] text-[11px]">${b.name}</h5>
-          <p class="text-[9px] text-[var(--st-text-muted)]">${b.desc}</p>
-        </div>
-      `).join('');
-
-      document.getElementById('modalTrophyCase').classList.remove('hidden');
-      playHapticPop(500, 'sine', 0.05);
-    }
-    function closeTrophyCaseModal() { document.getElementById('modalTrophyCase').classList.add('hidden'); }
-
-    // ================= SUBJECT & SYLLABUS MANAGEMENT =================
     function openSubjectModal() {
       const modal = document.getElementById('modalAddSubject');
       const nameInput = document.getElementById('inputSubjectName');
-      if (!modal) return;
       if (nameInput) nameInput.value = '';
-      const goalEl = document.getElementById('inputSubjectDaysGoal');
-      const hrsEl = document.getElementById('inputSubjectHours');
-      if (goalEl) goalEl.value = '26';
-      if (hrsEl) hrsEl.value = '2';
-
       modal.classList.remove('hidden');
       playHapticPop(520, 'sine', 0.05);
       setTimeout(() => { if (nameInput) nameInput.focus(); }, 100);
     }
 
-    function closeSubjectModal() {
-      const modal = document.getElementById('modalAddSubject');
-      if (modal) modal.classList.add('hidden');
-    }
+    function closeSubjectModal() { document.getElementById('modalAddSubject').classList.add('hidden'); }
 
     function submitNewSubject() {
       const name = document.getElementById('inputSubjectName').value.trim();
@@ -3751,7 +2924,7 @@
     function renderActivityHeatmap() {
       const container = document.getElementById('heatmapGridContainer');
       if (!container) return;
-      const totalDays = getTotalPlanDays();
+      const totalDays = daysInMonth(currentYear, currentMonth);
       const totalItems = appState.items ? appState.items.length : 1;
       let html = '';
 
@@ -3776,7 +2949,7 @@
 
     // ================= REFRESH METRICS & CHARTS =================
     function refreshMetricsAndCharts() {
-      const totalDays = getTotalPlanDays();
+      const totalDays = daysInMonth(currentYear, currentMonth);
       const totalItems = appState.items ? appState.items.length : 0;
       let totalCompletedAll = 0;
       let totalGoalAll = 0;
@@ -3810,11 +2983,10 @@
         });
       }
 
-      safeText('metricTotalHours', `${totalHoursInvested.toFixed(1)}h`);
-      safeText('metricHoursTarget', `/ ${targetHoursTotal.toFixed(0)}h goal`);
+      document.getElementById('metricTotalHours').textContent = `${totalHoursInvested.toFixed(1)}h`;
+      document.getElementById('metricHoursTarget').textContent = `/ ${targetHoursTotal.toFixed(0)}h goal`;
       const overallPct = targetHoursTotal > 0 ? Math.min(100, Math.round((totalHoursInvested / targetHoursTotal) * 100)) : 0;
-      const barEl = document.getElementById('barOverallPct');
-      if (barEl) barEl.style.width = `${overallPct}%`;
+      document.getElementById('barOverallPct').style.width = `${overallPct}%`;
 
       const isCurrentMonth = new Date().getFullYear() === currentYear && new Date().getMonth() === currentMonth;
       const todayDay = isCurrentMonth ? new Date().getDate() : 1;
@@ -3828,8 +3000,8 @@
           }
         });
       }
-      safeText('metricTodayHours', `${todayHours.toFixed(1)}h`);
-      safeText('metricTodayRatio', `${todayDone}/${totalItems} Done`);
+      document.getElementById('metricTodayHours').textContent = `${todayHours.toFixed(1)}h`;
+      document.getElementById('metricTodayRatio').textContent = `${todayDone}/${totalItems} Done`;
 
       let streak = 0;
       for (let d = todayDay; d >= 1; d--) {
@@ -3842,19 +3014,25 @@
         if (dailyLogged > 0) streak++;
         else break;
       }
-      safeText('metricStreakDays', `${streak} दिन`);
+      document.getElementById('metricStreakDays').textContent = `${streak} दिन`;
+
+      const rankBadge = document.getElementById('badgeRank');
+      if (rankBadge) {
+        let rankText = 'Novice';
+        if (streak >= 25 || totalHoursInvested >= 150) rankText = 'Beast';
+        else if (streak >= 15 || totalHoursInvested >= 90) rankText = 'Slayer';
+        else if (streak >= 7 || totalHoursInvested >= 40) rankText = 'Scholar';
+        rankBadge.textContent = rankText;
+      }
 
       const pace = todayDay > 0 ? (totalHoursInvested / todayDay).toFixed(1) : '0.0';
-      safeText('telemetryPace', `${pace}h/day`);
+      document.getElementById('telemetryPace').textContent = `${pace}h/day`;
       const remainingHours = Math.max(0, targetHoursTotal - totalHoursInvested);
       const daysNeeded = parseFloat(pace) > 0 ? Math.ceil(remainingHours / parseFloat(pace)) : 0;
-      safeText('telemetryForecast', `अनुमान: ~${daysNeeded} दिन शेष`);
+      document.getElementById('telemetryForecast').textContent = `अनुमान: ~${daysNeeded} दिन शेष`;
 
-      const ariScore = Math.min(100, Math.round((overallPct * 0.7) + (Math.min(streak, 30) * 1)));
-      safeText('badgeARI', `ARI: ${ariScore}%`);
-
-      safeText('valDoughnutDone', `${totalHoursInvested.toFixed(0)} hrs`);
-      safeText('valDoughnutLeft', `${Math.max(0, targetHoursTotal - totalHoursInvested).toFixed(0)} hrs`);
+      document.getElementById('valDoughnutDone').textContent = `${totalHoursInvested.toFixed(0)} hrs`;
+      document.getElementById('valDoughnutLeft').textContent = `${Math.max(0, targetHoursTotal - totalHoursInvested).toFixed(0)} hrs`;
 
       updateChartsData(totalDays, totalItems, itemScores);
     }
@@ -3986,15 +3164,12 @@
       studentName = document.getElementById('inputStudentName').value.trim() || 'Aspirant';
       targetExamName = document.getElementById('inputExamName').value.trim() || 'Target Exam';
       const dateStr = document.getElementById('inputExamTargetDate').value;
-      const daysVal = parseInt(document.getElementById('inputExamTargetDays').value) || 30;
       if (!dateStr) return;
 
-      targetExamDays = daysVal;
       targetExamDate = new Date(dateStr + 'T23:59:59').toISOString();
       localStorage.setItem('st_student_name', studentName);
       localStorage.setItem('st_target_exam_name', targetExamName);
       localStorage.setItem('st_target_exam_date', targetExamDate);
-      localStorage.setItem('st_target_exam_days', targetExamDays.toString());
 
       const preset = document.getElementById('selectExamPreset').value;
       const autoLoad = document.getElementById('checkAutoLoadBundle').checked;
@@ -4263,7 +3438,7 @@
 
     function generatePrintReport() {
       const tableBody = document.getElementById('printTableBody');
-      const totalDays = getTotalPlanDays();
+      const totalDays = daysInMonth(currentYear, currentMonth);
 
       document.getElementById('printExamDetails').textContent = `Exam: ${targetExamName || 'General Studies'}`;
       document.getElementById('printStudentDetails').textContent = `Aspirant: ${studentName || 'Student'}`;
