@@ -64,8 +64,9 @@
       background-color: var(--st-bg);
       line-height: 1.5;
       min-height: 100vh;
+      min-height: 100dvh;
       padding-top: env(safe-area-inset-top, 0px);
-      padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 84px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 90px);
     }
 
     #super-tracker-root.dark {
@@ -854,8 +855,8 @@
 
     </main>
 
-    <!-- NATIVE FIXED BOTTOM TAB BAR (TOUCH-OPTIMIZED) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-[var(--st-card)]/95 backdrop-blur-md border-t border-[var(--st-border)] px-1.5 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-2xl">
+    <!-- NATIVE FIXED BOTTOM TAB BAR (TOUCH-OPTIMIZED & PERMANENTLY VISIBLE) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-[999] bg-[var(--st-card)]/95 backdrop-blur-md border-t border-[var(--st-border)] px-1.5 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] transform-gpu">
       <div class="flex items-center justify-between max-w-md mx-auto overflow-x-auto no-scrollbar gap-1">
         <button type="button" onclick="switchTab('matrix')" id="navBtn_matrix" class="flex flex-col items-center justify-center gap-0.5 text-sky-500 py-1 px-2 rounded-xl transition-all flex-shrink-0 active:scale-95">
           <span class="text-xl leading-none">📋</span>
@@ -1164,6 +1165,66 @@
       </div>
     </div>
 
+    <!-- MODAL 9: READ-ONLY PAST DAY HISTORY PREVIEW MODAL -->
+    <div id="modalDayHistory" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="st-glass rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md max-h-[85vh] flex flex-col space-y-3.5 st-animate-fade border border-[var(--st-border)] shadow-2xl">
+        <div class="flex items-center justify-between pb-2 border-b border-[var(--st-border)]">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">📜</span>
+            <div>
+              <h3 class="font-display font-black text-sm text-[var(--st-text-head)] flex items-center gap-1.5">
+                <span>अध्ययन इतिहास (Study History)</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/25 font-bold uppercase">🔒 Read-Only</span>
+              </h3>
+              <p class="text-[11px] text-sky-500 font-mono font-bold" id="lblHistoryTargetDate">Day History</p>
+            </div>
+          </div>
+          <button onclick="closeDayHistoryModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+        </div>
+
+        <!-- Past Day Telemetry Metrics Summary (Energy, Sleep, PYQ) -->
+        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+          <div class="p-2 rounded-xl st-subtle">
+            <span class="text-[9px] font-bold text-[var(--st-text-muted)] block uppercase">माइंडसेट</span>
+            <span id="histEnergyBadge" class="font-bold text-[11px] block mt-0.5">--</span>
+          </div>
+          <div class="p-2 rounded-xl st-subtle">
+            <span class="text-[9px] font-bold text-[var(--st-text-muted)] block uppercase">नींद (Sleep)</span>
+            <span id="histSleepBadge" class="font-mono font-bold text-[11px] block mt-0.5">--</span>
+          </div>
+          <div class="p-2 rounded-xl st-subtle">
+            <span class="text-[9px] font-bold text-[var(--st-text-muted)] block uppercase">PYQ अभ्यास</span>
+            <span id="histPyqBadge" class="font-mono font-bold text-[11px] text-emerald-500 block mt-0.5">0 Solved</span>
+          </div>
+        </div>
+
+        <!-- Daily Reflection Note if exists -->
+        <div id="histNotesContainer" class="p-2.5 rounded-xl st-subtle text-xs border border-dashed border-[var(--st-border)] hidden">
+          <span class="text-[10px] font-bold uppercase text-[var(--st-text-muted)] flex items-center gap-1 mb-1">
+            <span>📓</span> <span>उस दिन के नोट्स (Reflection Notes):</span>
+          </span>
+          <p id="histNotesText" class="text-xs text-[var(--st-text-head)] italic leading-relaxed"></p>
+        </div>
+
+        <!-- Subjects & Detailed Topics Covered list -->
+        <div class="flex-1 overflow-y-auto no-scrollbar space-y-2 pr-0.5">
+          <h4 class="text-[10px] font-black uppercase tracking-wider text-[var(--st-text-muted)] px-1">
+            उस दिन पूर्ण किए गए विषय व टॉपिक लेजर:
+          </h4>
+          <div id="histSubjectsListContainer" class="space-y-2">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-[var(--st-border)] flex items-center justify-between text-xs">
+          <span class="text-[10px] text-[var(--st-text-muted)]">🔒 पूर्व रिकॉर्ड सुरक्षित है (No Editing)</span>
+          <button onclick="closeDayHistoryModal()" class="px-4 py-1.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-sm">
+            बंद करें (Close)
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- IN-APP FLOATING TOAST -->
     <div id="inAppToast" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 translate-y-10 opacity-0 pointer-events-none transition-all duration-300 px-4 py-2.5 rounded-2xl bg-slate-900/90 text-white border border-sky-500/40 shadow-2xl flex items-center gap-2 text-xs font-bold whitespace-nowrap">
       <span id="toastIcon">💡</span>
@@ -1402,6 +1463,7 @@
     let studentName = localStorage.getItem('st_student_name') || 'Aspirant';
     let targetExamName = localStorage.getItem('st_target_exam_name') || '';
     let targetExamDate = localStorage.getItem('st_target_exam_date') || '';
+    let targetExamDays = parseInt(localStorage.getItem('st_target_exam_days') || '30');
     let targetManifesto = localStorage.getItem('st_target_manifesto') || 'AIR Under 100 / Dream Service';
     let selectedRecallClarity = 5;
     let streakShields = parseInt(localStorage.getItem('st_streak_shields') || '2');
@@ -2110,6 +2172,13 @@
 
     function daysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
 
+    function getTotalPlanDays() {
+      if (targetExamDays && targetExamDays > 0) {
+        return Math.min(365, targetExamDays);
+      }
+      return daysInMonth(currentYear, currentMonth);
+    }
+
     function checkSpacedRepetitionDue(checks, realToday) {
       for (let prevDay of [realToday - 1, realToday - 7, realToday - 30]) {
         if (prevDay >= 1 && checks[prevDay] && !checks[realToday]) return true;
@@ -2156,7 +2225,7 @@
     }
 
     function renderMobileDaysCarousel() {
-      const totalDays = daysInMonth(currentYear, currentMonth);
+      const totalDays = getTotalPlanDays();
       const realToday = new Date().getDate();
       mobileActiveDay = realToday;
 
@@ -2168,26 +2237,154 @@
         const dObj = new Date(currentYear, currentMonth, day);
         const dayStr = WEEK_DAYS[currentLang][dObj.getDay()];
         const isToday = day === realToday;
+        const isPast = day < realToday;
+        const isFuture = day > realToday;
+
+        let dayClass = 'st-subtle text-[var(--st-text-muted)] opacity-35 cursor-not-allowed';
+        let badgeLabel = '🔒';
+        let clickHandler = '';
+
+        if (isToday) {
+          dayClass = 'bg-blue-600 text-white shadow-md shadow-blue-500/40 ring-2 ring-sky-300 scale-105 cursor-pointer';
+          badgeLabel = 'LIVE';
+        } else if (isPast) {
+          // Check if any study activity happened on this past day
+          let hasActivity = false;
+          if (appState && appState.items) {
+            hasActivity = appState.items.some(it => appState.checks[it.id] && appState.checks[it.id][day]);
+          }
+          dayClass = hasActivity 
+            ? 'st-glass text-emerald-500 border border-emerald-500/40 opacity-95 hover:border-sky-500 cursor-pointer active:scale-95' 
+            : 'st-subtle text-[var(--st-text-muted)] opacity-70 hover:opacity-100 cursor-pointer active:scale-95';
+          badgeLabel = hasActivity ? '✓ REC' : '📜 LOG';
+          clickHandler = `onclick="openDayHistoryModal(${day})"`;
+        }
 
         html += `
-          <div class="flex-shrink-0 flex flex-col items-center justify-center w-11 py-2 px-1 rounded-2xl text-center select-none ${
-              isToday 
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/40 ring-2 ring-sky-300 scale-105' 
-                : 'st-subtle text-[var(--st-text-muted)] opacity-40'
-            }">
+          <div ${clickHandler} class="flex-shrink-0 flex flex-col items-center justify-center w-11 py-2 px-1 rounded-2xl text-center select-none transition-all ${dayClass}" title="${isPast ? `Day ${day} का इतिहास देखें (Read-Only)` : (isToday ? 'आज का दिन' : 'भविष्य (Locked)')}">
             <span class="text-[8px] uppercase font-bold">${dayStr}</span>
             <span class="text-xs font-black font-mono">${day}</span>
-            <span class="text-[7px] mt-0.5">${isToday ? 'LIVE' : '🔒'}</span>
+            <span class="text-[7px] mt-0.5 font-bold">${badgeLabel}</span>
           </div>
         `;
       }
       container.innerHTML = html;
     }
 
+    // ================= READ-ONLY DAY HISTORY VIEWER =================
+    function openDayHistoryModal(day) {
+      const monthName = MONTH_NAMES[currentLang][currentMonth];
+      const dObj = new Date(currentYear, currentMonth, day);
+      const dayStr = WEEK_DAYS[currentLang][dObj.getDay()];
+      const targetDateFormatted = `${dayStr}, ${day} ${monthName} ${currentYear} (Day ${day})`;
+      const targetDateISO = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+      document.getElementById('lblHistoryTargetDate').textContent = targetDateFormatted;
+
+      // Energy level
+      const energy = (appState.dailyEnergy && appState.dailyEnergy[day]) || 'none';
+      const energyBadge = document.getElementById('histEnergyBadge');
+      if (energy === 'high') energyBadge.innerHTML = '<span class="text-emerald-500">⚡ सुपर फोकस</span>';
+      else if (energy === 'med') energyBadge.innerHTML = '<span class="text-sky-500">🔋 सामान्य</span>';
+      else if (energy === 'low') energyBadge.innerHTML = '<span class="text-rose-500">🪫 थकान</span>';
+      else energyBadge.innerHTML = '<span class="text-[var(--st-text-muted)]">दर्ज नहीं</span>';
+
+      // Sleep
+      const sleep = (appState.dailySleep && appState.dailySleep[day]) || null;
+      document.getElementById('histSleepBadge').textContent = sleep ? `${sleep} hrs` : '--';
+
+      // PYQs
+      const pyqData = (appState.dailyPyqDetail && appState.dailyPyqDetail[day]) || { correct: 0, wrong: 0 };
+      const pyqTotal = (pyqData.correct || 0) + (pyqData.wrong || 0);
+      document.getElementById('histPyqBadge').textContent = pyqTotal > 0 ? `${pyqTotal} Qs (${pyqData.correct}✓)` : '0 Solved';
+
+      // Daily Reflection Note
+      const note = (appState.dailyNotes && appState.dailyNotes[day]) || '';
+      const notesContainer = document.getElementById('histNotesContainer');
+      const notesText = document.getElementById('histNotesText');
+      if (note && note.trim().length > 0) {
+        notesContainer.classList.remove('hidden');
+        notesText.textContent = `"${note}"`;
+      } else {
+        notesContainer.classList.add('hidden');
+      }
+
+      // Subject breakdown and topic study logs on that date
+      const subjectsContainer = document.getElementById('histSubjectsListContainer');
+      subjectsContainer.innerHTML = '';
+
+      const logsOnDate = (appState.spacedLogs || []).filter(l => l.studiedDate === targetDateISO || l.dayLogged === day);
+
+      if (!appState.items || appState.items.length === 0) {
+        subjectsContainer.innerHTML = `<div class="p-4 text-center text-xs text-[var(--st-text-muted)]">कोई विषय डेटा उपलब्ध नहीं है।</div>`;
+      } else {
+        let anyActivity = false;
+
+        appState.items.forEach(item => {
+          const wasChecked = !!(appState.checks[item.id] && appState.checks[item.id][day]);
+          const itemLogs = logsOnDate.filter(l => String(l.itemId) === String(item.id));
+
+          if (wasChecked || itemLogs.length > 0) {
+            anyActivity = true;
+            let logDetailsHTML = '';
+
+            if (itemLogs.length > 0) {
+              logDetailsHTML = itemLogs.map(l => `
+                <div class="mt-1.5 p-2 rounded-xl bg-black/5 dark:bg-white/5 space-y-1">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-[var(--st-text-head)]">📖 ${l.topic}</span>
+                    <span class="text-sky-500 font-mono font-bold">📄 ${l.pageRange}</span>
+                  </div>
+                  ${l.keyNotes ? `<p class="text-[10px] text-[var(--st-text-muted)] italic">"${l.keyNotes}"</p>` : ''}
+                </div>
+              `).join('');
+            } else {
+              logDetailsHTML = `<span class="text-[10px] text-emerald-500 font-bold block mt-1">✓ अध्ययन पूरा किया गया (Verified Studied)</span>`;
+            }
+
+            subjectsContainer.innerHTML += `
+              <div class="p-3 rounded-2xl st-subtle border border-[var(--st-border)] space-y-1">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2 truncate">
+                    <span class="text-xl">${item.icon || '📌'}</span>
+                    <div class="truncate">
+                      <h5 class="text-xs font-black text-[var(--st-text-head)] truncate">${item.name}</h5>
+                      <span class="text-[9px] text-[var(--st-text-muted)] font-mono">${item.cat || 'General'} • ${item.hours || 1}h</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px]">
+                    ✓ Verified
+                  </span>
+                </div>
+                ${logDetailsHTML}
+              </div>
+            `;
+          }
+        });
+
+        if (!anyActivity) {
+          subjectsContainer.innerHTML = `
+            <div class="p-6 text-center text-xs text-[var(--st-text-muted)] st-subtle rounded-2xl border border-dashed border-[var(--st-border)] space-y-1">
+              <span class="text-2xl block">🛌</span>
+              <p class="font-bold text-[var(--st-text-head)]">इस दिन कोई अध्ययन दर्ज नहीं था।</p>
+              <p class="text-[10px]">उस दिन कोई टॉपिक या चेकबॉक्स टिक नहीं किया गया था।</p>
+            </div>
+          `;
+        }
+      }
+
+      document.getElementById('modalDayHistory').classList.remove('hidden');
+      playHapticPop(480, 'sine', 0.05);
+    }
+
+    function closeDayHistoryModal() {
+      document.getElementById('modalDayHistory').classList.add('hidden');
+    }
+
     function renderMobileCards() {
       const container = document.getElementById('mobileCardsContainer');
       if (!container) return;
-      const totalDays = daysInMonth(currentYear, currentMonth);
+      const totalDays = getTotalPlanDays();
 
       if (!appState.items || appState.items.length === 0) {
         container.innerHTML = `
@@ -2924,7 +3121,7 @@
     function renderActivityHeatmap() {
       const container = document.getElementById('heatmapGridContainer');
       if (!container) return;
-      const totalDays = daysInMonth(currentYear, currentMonth);
+      const totalDays = getTotalPlanDays();
       const totalItems = appState.items ? appState.items.length : 1;
       let html = '';
 
@@ -2949,7 +3146,7 @@
 
     // ================= REFRESH METRICS & CHARTS =================
     function refreshMetricsAndCharts() {
-      const totalDays = daysInMonth(currentYear, currentMonth);
+      const totalDays = getTotalPlanDays();
       const totalItems = appState.items ? appState.items.length : 0;
       let totalCompletedAll = 0;
       let totalGoalAll = 0;
@@ -3164,12 +3361,15 @@
       studentName = document.getElementById('inputStudentName').value.trim() || 'Aspirant';
       targetExamName = document.getElementById('inputExamName').value.trim() || 'Target Exam';
       const dateStr = document.getElementById('inputExamTargetDate').value;
+      const daysVal = parseInt(document.getElementById('inputExamTargetDays').value) || 30;
       if (!dateStr) return;
 
+      targetExamDays = daysVal;
       targetExamDate = new Date(dateStr + 'T23:59:59').toISOString();
       localStorage.setItem('st_student_name', studentName);
       localStorage.setItem('st_target_exam_name', targetExamName);
       localStorage.setItem('st_target_exam_date', targetExamDate);
+      localStorage.setItem('st_target_exam_days', targetExamDays.toString());
 
       const preset = document.getElementById('selectExamPreset').value;
       const autoLoad = document.getElementById('checkAutoLoadBundle').checked;
@@ -3438,7 +3638,7 @@
 
     function generatePrintReport() {
       const tableBody = document.getElementById('printTableBody');
-      const totalDays = daysInMonth(currentYear, currentMonth);
+      const totalDays = getTotalPlanDays();
 
       document.getElementById('printExamDetails').textContent = `Exam: ${targetExamName || 'General Studies'}`;
       document.getElementById('printStudentDetails').textContent = `Aspirant: ${studentName || 'Student'}`;
